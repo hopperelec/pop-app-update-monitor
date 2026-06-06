@@ -1,8 +1,9 @@
-import {existsSync, readFileSync, writeFileSync} from "node:fs";
+import {existsSync, readFileSync} from "node:fs";
 import googlePlayStore, {IFnAppOptions} from "google-play-scraper";
 import appleAppStore from "app-store-scraper";
 import {WebhookClient, APIEmbedField} from "discord.js";
 import 'dotenv/config';
+import {writeFile} from "node:fs/promises";
 
 const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
 if (!DISCORD_WEBHOOK_URL) {
@@ -132,6 +133,6 @@ async function checkUpdates() {
 
     console.log(' Check complete.');
     lastVersions.checkedAt = newCheckedAt.getTime();
-    writeFileSync(LAST_VERSIONS_FILE, JSON.stringify(lastVersions), 'utf8');
+    await writeFile(LAST_VERSIONS_FILE, JSON.stringify(lastVersions), 'utf8');
 }
 checkUpdates().then(() => setInterval(checkUpdates, CHECK_INTERVAL_MS));
