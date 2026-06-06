@@ -4,6 +4,7 @@ import appleAppStore from "app-store-scraper";
 import {WebhookClient, APIEmbedField} from "discord.js";
 import 'dotenv/config';
 import {writeFile} from "node:fs/promises";
+import {decode as decodeHtmlEntities} from "html-entities";
 
 const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
 if (!DISCORD_WEBHOOK_URL) {
@@ -101,7 +102,7 @@ async function checkUpdates() {
                         'Android',
                         lastVersions.android?.version || null,
                         androidData.version,
-                        androidData.recentChanges,
+                        decodeHtmlEntities(androidData.recentChanges.replaceAll(/<br\s*\/?>/gi, '\n')),
                         `https://play.google.com/store/apps/details?id=${APPS.android.appId}`
                     );
                     lastVersions.android = {
