@@ -14,6 +14,7 @@ const discordWebhookClient = DISCORD_WEBHOOK_URL ? new WebhookClient({ url: DISC
 
 const LAST_VERSIONS_FILE = 'last-versions.json';
 const CHECK_INTERVAL_MS = 1000 * 60 * 5; // Check every 5 minutes
+const DISCORD_FIELD_VALUE_LIMIT = 1024;
 const APPS: {
     android: IFnAppOptions,
     ios: { id: number; country: string } // app-store-scraper doesn't have type definitions
@@ -71,6 +72,11 @@ async function handleUpdate(
     }
 
     if (!releaseNotes) releaseNotes = 'No release notes provided.';
+    if (releaseNotes.length > DISCORD_FIELD_VALUE_LIMIT) {
+        const truncatedSuffix = `... (truncated)`
+        releaseNotes = releaseNotes.substring(0, DISCORD_FIELD_VALUE_LIMIT - truncatedSuffix.length) + truncatedSuffix;
+    }
+
     if (!oldVersion) {
         log(`Initial version recorded: ${newVersion}`);
     } else if (oldVersion === newVersion) {
