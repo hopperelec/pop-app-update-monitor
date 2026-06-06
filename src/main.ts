@@ -97,7 +97,7 @@ async function checkUpdates() {
         googlePlayStore.app(APPS.android).then(
             async androidData => {
                 const updated = new Date(androidData.updated).getTime();
-                if (lastVersions.android?.updated !== updated) {
+                if (!lastVersions.android || updated > lastVersions.android.updated) {
                     await handleUpdate(
                         'Android',
                         lastVersions.android?.version || null,
@@ -115,7 +115,7 @@ async function checkUpdates() {
         appleAppStore.app(APPS.ios).then(
             async iosData => {
                 const updated = new Date(iosData.updated).getTime();
-                if (lastVersions.ios?.updated !== updated) {
+                if (!lastVersions.ios || updated > lastVersions.ios.updated) {
                     await handleUpdate(
                         'iOS',
                         lastVersions.ios?.version || null,
