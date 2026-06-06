@@ -77,14 +77,14 @@ async function handleUpdate(
         log(`New build of ${newVersion} detected`);
         await postUpdate([
             {name: 'Version', value: newVersion, inline: true},
-            {name: 'Release Notes', value: releaseNotes || 'No release notes provided.'}
+            {name: 'Release Notes', value: releaseNotes}
         ]);
     } else {
         log(`New version detected: ${newVersion} (previous: ${oldVersion})`);
         await postUpdate([
             {name: 'Previous Version', value: oldVersion, inline: true},
             {name: 'New Version', value: newVersion, inline: true},
-            {name: 'Release Notes', value: releaseNotes || 'No release notes provided.'}
+            {name: 'Release Notes', value: releaseNotes}
         ]);
     }
 }
